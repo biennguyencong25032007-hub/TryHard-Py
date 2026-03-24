@@ -24,4 +24,12 @@ while True:
         break
         
 total = principle * pow((1 + rate / 100 ), time)
-print(f"balance after {time} year/s: ${total:,2f}")
+print(f"balance after {time} year/s: ${total:2f}")
+
+
+#output:
+       #enter the principle amount: 500
+       #enter the interest rate: 7
+       #enter the time in years: 2
+       #balance after 2 year/s: $572.450000
+       

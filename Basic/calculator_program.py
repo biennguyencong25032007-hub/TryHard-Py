@@ -16,3 +16,10 @@ elif operator == "/":
     print(round(result, 3))
 else:
     print(f"{operator} is not a valid operator")
+    
+    
+# output:
+        #enter an operator (+ - * /): *
+        #enter the 1st number: 3
+        #enter the 2nd number: 15
+        #45.0

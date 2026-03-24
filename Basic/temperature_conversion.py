@@ -9,3 +9,9 @@ elif unit == "F":
     print(f"the temperature in Celsius is: {temp} 'C ")
 else:
     print(f"{unit} is an invalid unit of measurement ")
+    
+    
+#output:
+       #is this temperature in Celsius or Fahrenheit (c/F): C
+       #enter the temperature: 36
+       #the temerature in Fahrenheit is: 96.8 'F 
