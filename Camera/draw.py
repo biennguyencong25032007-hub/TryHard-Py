@@ -32,6 +32,7 @@ def count_fingers(hand):
     else:
         fingers.append(0)
 
+    
     tips = [8,12,16,20]
     for tip in tips:
         if hand.landmark[tip].y < hand.landmark[tip-2].y:
