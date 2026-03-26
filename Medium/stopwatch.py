@@ -62,6 +62,8 @@ class Stopwatch(QWidget):
         self.label.setText("00:00:00.00")
 
 
+
+
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = Stopwatch()

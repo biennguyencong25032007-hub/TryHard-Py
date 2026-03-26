@@ -59,7 +59,7 @@ while True:
 
                 cv2.circle(frame, (x1, y1), 10, (0,255,0), -1)
 
-            # 👆 + 🤏 → click (2 ngón gần nhau)
+            # click (2 ngón gần nhau)
             distance = np.hypot(x2 - x1, y2 - y1)
 
             if distance < 40:
@@ -74,3 +74,4 @@ while True:
 
 cap.release()
 cv2.destroyAllWindows()
+

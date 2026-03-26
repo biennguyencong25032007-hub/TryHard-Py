@@ -113,7 +113,7 @@ class App(QWidget):
         rgb = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         result = face_mesh.process(rgb)
 
-        emotion = "sad"  # mặc định
+        emotion = "sad"  
 
         if result.multi_face_landmarks:
             for face in result.multi_face_landmarks:
@@ -135,7 +135,6 @@ class App(QWidget):
                 else:
                     emotion = "sad"
 
-        #ICON Ở GÓC PHẢI TRÊN
         frame = overlay_icon(frame, icons[emotion], w-140, 20)
 
         self.current_frame = frame.copy()

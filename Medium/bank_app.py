@@ -6,10 +6,8 @@ class BankApp:
         self.master = master
         self.master.title("Simple Bank App")
 
-        # Initialize balance
         self.balance = 0
 
-        # Create GUI elements
         self.label_balance = tk.Label(master, text="Balance: $0")
         self.label_balance.pack()
 
