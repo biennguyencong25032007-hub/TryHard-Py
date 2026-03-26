@@ -83,7 +83,7 @@ class App(QWidget):
         self.cap = cv2.VideoCapture(0)
         self.filter_on = True
         self.current_frame = None
-
+        
         self.timer = QTimer()
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(30)
