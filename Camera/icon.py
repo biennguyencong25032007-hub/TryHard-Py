@@ -8,7 +8,6 @@ from PyQt5.QtWidgets import QApplication, QLabel, QWidget, QVBoxLayout, QPushBut
 from PyQt5.QtCore import QTimer
 from PyQt5.QtGui import QImage, QPixmap
 
-# ================= DOWNLOAD ICON =================
 def download_icon(url, filename):
     if not os.path.exists(filename):
         urllib.request.urlretrieve(url, filename)
@@ -18,7 +17,6 @@ download_icon("https://cdn-icons-png.flaticon.com/512/742/742752.png", "sad.png"
 download_icon("https://cdn-icons-png.flaticon.com/512/742/742774.png", "angry.png")
 download_icon("https://cdn-icons-png.flaticon.com/512/742/742750.png", "surprise.png")
 
-# ================= LOAD ICON =================
 def load_icon(path):
     return cv2.imread(path, cv2.IMREAD_UNCHANGED)
 
@@ -29,15 +27,12 @@ icons = {
     "surprise": load_icon("surprise.png"),
 }
 
-# ================= MEDIAPIPE =================
 mp_face = mp.solutions.face_mesh
 face_mesh = mp_face.FaceMesh()
 
-# ================= FILTER =================
 def beauty_filter(frame):
     return cv2.bilateralFilter(frame, 9, 75, 75)
 
-# ================= OVERLAY =================
 def overlay_icon(img, icon, x, y, size=120):
     if icon is None:
         return img
@@ -58,7 +53,7 @@ def overlay_icon(img, icon, x, y, size=120):
 
     return img
 
-# ================= APP =================
+#APP 
 class App(QWidget):
     def __init__(self):
         super().__init__()
@@ -109,7 +104,7 @@ class App(QWidget):
 
         frame = cv2.flip(frame, 1)
 
-        # ✨ Filter
+        # Filter
         if self.filter_on:
             frame = beauty_filter(frame)
 
@@ -130,7 +125,7 @@ class App(QWidget):
                 mouth_h = abs(int(bottom.y*h) - int(top.y*h))
                 mouth_w = abs(int(right.x*w) - int(left.x*w))
 
-                # 🧠 Nhận diện
+                # Nhận diện
                 if mouth_h > 35:
                     emotion = "surprise"
                 elif mouth_w > 90:
@@ -140,7 +135,7 @@ class App(QWidget):
                 else:
                     emotion = "sad"
 
-        # 🔥 ICON Ở GÓC PHẢI TRÊN
+        #ICON Ở GÓC PHẢI TRÊN
         frame = overlay_icon(frame, icons[emotion], w-140, 20)
 
         self.current_frame = frame.copy()
@@ -153,7 +148,6 @@ class App(QWidget):
         self.label.setPixmap(QPixmap.fromImage(qt_image))
 
 
-# ================= RUN =================
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = App()
