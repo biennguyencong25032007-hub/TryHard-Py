@@ -21,5 +21,5 @@ else:
 # output:
         #enter an operator (+ - * /): *
         #enter the 1st number: 3
-        #enter the 2nd number: 15
+        #enter the 2nd number: 15Pp
         #45.0
