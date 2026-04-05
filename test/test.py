@@ -1,9 +1,11 @@
-rows = 5
-k = 2 * rows - 2
-for i in range(rows, -1, -1):
-    for j in range(k, 0, -1):
-        print(end=" ")
-    k = k - 2
-    for j in range(0, i + 1):
-        print("* ", end="")
-    print()
+for item in range:
+    if item == 5:
+        print("Found 5!")
+    else:
+        print("Not 5.")
+        if item == 10:
+            print("Found 10!")
+            
+from django.utils.translation import ugettext_lazy as _
+fiwe = _("Hello, World!")
+    
