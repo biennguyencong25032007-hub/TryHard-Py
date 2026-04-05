@@ -6,4 +6,4 @@ for i in range(len(s)//2):
         is_palindrome = False
         break
 
-print("Là chuỗi đối xứng" if is_palindrome else "Không phải")
+print(f"{s} is a palindrome: {is_palindrome}")
