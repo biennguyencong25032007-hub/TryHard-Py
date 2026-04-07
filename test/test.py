@@ -1,34 +1,48 @@
-def sinhvien(ten, mssv, diem_toan, diem_ly, diem_hoa):
-    diem_tb = (diem_toan + diem_ly + diem_hoa) / 3
-    if diem_tb >= 9:
-        xep_loai = "Xuất sắc"
-    elif diem_tb >= 8:
-        xep_loai = "Giỏi"
-    elif diem_tb >= 7:
-        xep_loai = "Khá"
-    elif diem_tb >= 5:
-        xep_loai = "Trung bình"
-    else:
-        xep_loai = "Yếu"
+class SinhVien:
+    def __init__(self, ten, mssv, diem_toan, diem_ly, diem_hoa):
+        self.ten       = ten
+        self.mssv      = mssv
+        self.diem_toan = diem_toan
+        self.diem_ly   = diem_ly
+        self.diem_hoa  = diem_hoa
+   
+    def tinh_tb(self):
+        return (self.diem_toan + self.diem_ly + self.diem_hoa) / 3
+    
+    def __str__(self):
+        return f"{self.mssv} | {self.ten:15s} | TB: {self.tinh_tb():.1f}"
+    
+class QuanLySV:
+    def __init__(self):
+        self.ds = []  
+    
+    def them(self, sv):
+        self.ds.append(sv)
+        print(f"đã thêm : {sv.ten}")
+        
+    def hien_thi(self):
+        for sv in self.ds:
+            print(sv)
+        
+    def tim_kiem(self, ten):
+          return [sv for sv in self.ds
+                if ten.lower() in sv.ten.lower()] 
+    
+    def gioi_nhat(self):
+        return max(self.ds, key=lambda sv: sv.tinh_tb())
+    
+    
+ql = QuanLySV()
+ql.them(SinhVien("Nguyen Van A", "001", 8, 7, 9))
+ql.them(SinhVien("Tran Thi B",  "002", 5, 6, 4))
+ql.them(SinhVien("Le Van C",    "003", 9, 9, 10))
 
-    return {
-        "ten": ten, "mssv": mssv,
-        "diem_toan": diem_toan, "diem_ly": diem_ly, "diem_hoa": diem_hoa,
-        "diem_tb": round(diem_tb, 2),   # ← làm tròn 2 chữ số
-        "xep_loai": xep_loai
-    }
+print("\n── Danh sách ──")
+ql.hien_thi()
 
-# ── Hàm in đẹp ───────────────────────────────
-def in_sinh_vien(sv):
-    print(f"┌{'─'*30}┐")
-    print(f"│ Tên  : {sv['ten']:22s}│")
-    print(f"│ MSSV : {sv['mssv']:22s}│")
-    print(f"│ Toán : {sv['diem_toan']:<22}│")
-    print(f"│ Lý   : {sv['diem_ly']:<22}│")
-    print(f"│ Hóa  : {sv['diem_hoa']:<22}│")
-    print(f"│ TB   : {sv['diem_tb']:<22}│")
-    print(f"│ Loại : {sv['xep_loai']:22s}│")
-    print(f"└{'─'*30}┘")
+print("\n── Tìm 'van' ──")
+for sv in ql.tim_kiem("van"):
+    print(sv)
 
-sv = sinhvien("Nguyen Van A", "123456", 8, 7, 9)
-in_sinh_vien(sv)
+print("\n── Giỏi nhất ──")
+print(ql.gioi_nhat())
