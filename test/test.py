@@ -1,48 +1,43 @@
-class SinhVien:
-    def __init__(self, ten, mssv, diem_toan, diem_ly, diem_hoa):
-        self.ten       = ten
-        self.mssv      = mssv
-        self.diem_toan = diem_toan
-        self.diem_ly   = diem_ly
-        self.diem_hoa  = diem_hoa
-   
-    def tinh_tb(self):
-        return (self.diem_toan + self.diem_ly + self.diem_hoa) / 3
-    
-    def __str__(self):
-        return f"{self.mssv} | {self.ten:15s} | TB: {self.tinh_tb():.1f}"
-    
-class QuanLySV:
-    def __init__(self):
-        self.ds = []  
-    
-    def them(self, sv):
-        self.ds.append(sv)
-        print(f"đã thêm : {sv.ten}")
-        
-    def hien_thi(self):
-        for sv in self.ds:
-            print(sv)
-        
-    def tim_kiem(self, ten):
-          return [sv for sv in self.ds
-                if ten.lower() in sv.ten.lower()] 
-    
-    def gioi_nhat(self):
-        return max(self.ds, key=lambda sv: sv.tinh_tb())
-    
-    
-ql = QuanLySV()
-ql.them(SinhVien("Nguyen Van A", "001", 8, 7, 9))
-ql.them(SinhVien("Tran Thi B",  "002", 5, 6, 4))
-ql.them(SinhVien("Le Van C",    "003", 9, 9, 10))
+import pandas as pd
+import numpy as np
+import io
 
-print("\n── Danh sách ──")
-ql.hien_thi()
+data = """ten,mon,diem,hoc_ky
+An,Toan,8.5,1
+An,Van,7.0,1
+An,Anh,9.0,1
+Binh,Toan,6.0,1
+Binh,Van,8.0,1
+Binh,Anh,7.5,1
+Chi,Toan,9.5,1
+Chi,Van,8.5,1
+Chi,Anh,8.0,1"""
 
-print("\n── Tìm 'van' ──")
-for sv in ql.tim_kiem("van"):
-    print(sv)
+df = pd.read_csv(io.StringIO(data))
 
-print("\n── Giỏi nhất ──")
-print(ql.gioi_nhat())
+# 1. Điểm trung bình mỗi học sinh
+dtb = df.groupby('ten')['diem'].mean().round(2)
+print(dtb)
+# 2. Học sinh điểm cao nhất
+print("Cao nhất:", dtb.idxmax(), "-", dtb.max())
+
+# 3. Điểm trung bình từng môn
+print(df.groupby('mon')['diem'].mean().round(2))
+
+# 4. Pivot table
+bang = pd.pivot_table(
+    df, values='diem',
+    index='ten', columns='mon',
+    aggfunc='mean'
+)
+print(bang)
+
+# 5. Xếp loại dựa vào điểm trung bình
+diem_tb = df.groupby('ten')['diem'].mean()
+conditions = [diem_tb >= 8.5, diem_tb >= 7.0]
+choices    = ['Gioi', 'Kha']
+xep_loai = pd.Series(
+    np.select(conditions, choices, default='TB'),
+    index=diem_tb.index
+)
+print(xep_loai)
