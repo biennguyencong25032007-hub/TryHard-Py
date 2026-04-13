@@ -1,43 +1,70 @@
-import pandas as pd
-import numpy as np
-import io
+import json
 
-data = """ten,mon,diem,hoc_ky
-An,Toan,8.5,1
-An,Van,7.0,1
-An,Anh,9.0,1
-Binh,Toan,6.0,1
-Binh,Van,8.0,1
-Binh,Anh,7.5,1
-Chi,Toan,9.5,1
-Chi,Van,8.5,1
-Chi,Anh,8.0,1"""
+class CanBo:
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi):
+        self.ho_ten    = ho_ten
+        self.tuoi      = tuoi
+        self.gioi_tinh = gioi_tinh
+        self.dia_chi   = dia_chi
 
-df = pd.read_csv(io.StringIO(data))
+    def to_dict(self):
+        return {
+            "ho_ten":    self.ho_ten,
+            "tuoi":      self.tuoi,
+            "gioi_tinh": self.gioi_tinh,
+            "dia_chi":   self.dia_chi,
+            "loai":      self.__class__.__name__,
+        }
 
-# 1. Điểm trung bình mỗi học sinh
-dtb = df.groupby('ten')['diem'].mean().round(2)
-print(dtb)
-# 2. Học sinh điểm cao nhất
-print("Cao nhất:", dtb.idxmax(), "-", dtb.max())
+    def __repr__(self):
+        return f"CanBo({self.ho_ten}, {self.tuoi}, {self.gioi_tinh}, {self.dia_chi})"
 
-# 3. Điểm trung bình từng môn
-print(df.groupby('mon')['diem'].mean().round(2))
+    @classmethod
+    def from_dict(cls, d):
+        return cls(d["ho_ten"], d["tuoi"], d["gioi_tinh"], d["dia_chi"])
 
-# 4. Pivot table
-bang = pd.pivot_table(
-    df, values='diem',
-    index='ten', columns='mon',
-    aggfunc='mean'
-)
-print(bang)
 
-# 5. Xếp loại dựa vào điểm trung bình
-diem_tb = df.groupby('ten')['diem'].mean()
-conditions = [diem_tb >= 8.5, diem_tb >= 7.0]
-choices    = ['Gioi', 'Kha']
-xep_loai = pd.Series(
-    np.select(conditions, choices, default='TB'),
-    index=diem_tb.index
-)
-print(xep_loai)
+class CongNhan(CanBo):
+    def __init__(self, ho_ten, tuoi, gioi_tinh, dia_chi, bac_tho):
+        super().__init__(ho_ten, tuoi, gioi_tinh, dia_chi)
+        self.bac_tho = bac_tho
+
+    def to_dict(self):
+        d = super().to_dict()
+        d["bac_tho"] = self.bac_tho
+        return d
+
+    def __repr__(self):
+        return f"CongNhan({self.ho_ten}, {self.tuoi}, {self.gioi_tinh}, {self.dia_chi}, bac_tho={self.bac_tho})"
+
+    @classmethod
+    def from_dict(cls, d):
+        return cls(d["ho_ten"], d["tuoi"], d["gioi_tinh"], d["dia_chi"], d["bac_tho"])
+
+
+# Map loại để khôi phục đúng class
+LOAI_MAP = {
+    "CanBo": CanBo,
+    "CongNhan": CongNhan,
+}
+
+# === LƯU ===
+danh_sach = [
+    CanBo("Nguyễn An", 30, "Nam", "Hà Nội"),
+    CongNhan("Trần Bình", 25, "Nam", "TP.HCM", 5),
+]
+
+data = [cb.to_dict() for cb in danh_sach]
+
+with open("canbo.json", "w", encoding="utf-8") as f:
+    json.dump(data, f, ensure_ascii=False, indent=2)
+
+# === TẢI ===
+with open("canbo.json", "r", encoding="utf-8") as f:
+    raw = json.load(f)
+
+# Khôi phục đúng loại theo "loai"
+ds_loaded = [LOAI_MAP[d["loai"]].from_dict(d) for d in raw]
+
+for cb in ds_loaded:
+    print(cb)
