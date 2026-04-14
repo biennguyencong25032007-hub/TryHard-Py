@@ -42,7 +42,6 @@ class CongNhan(CanBo):
         return cls(d["ho_ten"], d["tuoi"], d["gioi_tinh"], d["dia_chi"], d["bac_tho"])
 
 
-# Map loại để khôi phục đúng class
 LOAI_MAP = {
     "CanBo": CanBo,
     "CongNhan": CongNhan,
@@ -68,3 +67,4 @@ ds_loaded = [LOAI_MAP[d["loai"]].from_dict(d) for d in raw]
 
 for cb in ds_loaded:
     print(cb)
+    
